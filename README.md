@@ -1,4 +1,4 @@
-# InfinityWalkerV1
+# InfinityWalker
 
 - Programowanie grafiki 3D
 - Modelowanie i analiza systemów informatycznych

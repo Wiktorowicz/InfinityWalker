@@ -4,4 +4,4 @@
 - Modelowanie i analiza systemów informatycznych
 - Animacja komputerowa
 
-6000.3.12f1
+6000.3.11f1

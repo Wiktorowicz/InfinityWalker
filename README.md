@@ -1,7 +1,7 @@
 # InfinityWalker
 
-- Programowanie grafiki 3D
-- Modelowanie i analiza systemów informatycznych
-- Animacja komputerowa
+- Programowanie grafiki 3D (Projekt)
+- Modelowanie i analiza systemów informatycznych (Projekt)
+- Animacja komputerowa (Projekt)
 
-6000.3.11f1
+- Wersja Unity: 6000.3.11f1

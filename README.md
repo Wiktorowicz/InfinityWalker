@@ -4,4 +4,4 @@
 - Modelowanie i analiza systemów informatycznych (Projekt)
 - Animacja komputerowa (Projekt)
 
-- Wersja Unity: 6000.3.11f1
+Wersja Unity: 6000.3.11f1

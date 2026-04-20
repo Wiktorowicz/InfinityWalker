@@ -6,10 +6,8 @@ public class PlayerCollision : MonoBehaviour
     {
         Debug.Log("DOTKNĄŁEM: " + other.name);
 
-        if (other.CompareTag("Obstacle"))
-        {
-            Debug.Log("GAME OVER");
-            Time.timeScale = 0f;
+        if (other.CompareTag("Obstacle")) {
+            GameManager.Instance.EndGame();
         }
     }
 }

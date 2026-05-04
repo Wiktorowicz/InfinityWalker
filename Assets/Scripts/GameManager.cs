@@ -1,19 +1,25 @@
-using System;
+﻿using System;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
     public static GameManager Instance { get; private set; }
 
     public event EventHandler OnGameOver;
     public event EventHandler OnScoreChanged;
+    public event EventHandler OnGamePaused;
+    public event EventHandler OnGameUnpaused;
 
-    public enum GameState {
+    public enum GameState
+    {
         Gameplaying,
+        Paused,
         GameOver
     }
 
     public GameState CurrentGameState => currentGameState;
     public int CurrentScore => Mathf.FloorToInt(currentScore);
+    public int BestScore => PlayerPrefs.GetInt("BestScore", 0);
     public float CurrentScoreMultiplier => currentScoreMultiplier;
 
     [Header("Game State")]
@@ -29,8 +35,10 @@ public class GameManager : MonoBehaviour {
     private float currentScore;
     private float currentScoreMultiplier = 1f;
 
-    private void Awake() {
-        if (Instance != null && Instance != this) {
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
             Destroy(gameObject);
             return;
         }
@@ -38,20 +46,21 @@ public class GameManager : MonoBehaviour {
         Instance = this;
     }
 
-    private void Start() {
+    private void Start()
+    {
         SetGameState(startingGameState);
     }
 
-    private void Update() {
-        if (currentGameState != GameState.Gameplaying) {
+    private void Update()
+    {
+        if (currentGameState != GameState.Gameplaying)
             return;
-        }
 
         UpdateScore();
-
     }
 
-    private void UpdateScore() {
+    private void UpdateScore()
+    {
         currentScoreMultiplier += multiplierIncreasePerSecond * Time.deltaTime;
         currentScoreMultiplier = Mathf.Min(currentScoreMultiplier, maxMultiplier);
 
@@ -60,39 +69,60 @@ public class GameManager : MonoBehaviour {
         OnScoreChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public void AddBonusScore(int amount) {
-        currentScore += amount;
-        OnScoreChanged?.Invoke(this, EventArgs.Empty);
-    }
-
-    public void ResetScore() {
+    public void ResetScore()
+    {
         currentScore = 0f;
         currentScoreMultiplier = 1f;
-
         OnScoreChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public void SetGameState(GameState newGameState) {
-        if (currentGameState == newGameState) {
+    public void SetGameState(GameState newGameState)
+    {
+        if (currentGameState == newGameState)
             return;
-        }
 
         currentGameState = newGameState;
 
-        switch (currentGameState) {
+        switch (currentGameState)
+        {
             case GameState.Gameplaying:
                 Time.timeScale = 1f;
                 ResetScore();
+                OnGameUnpaused?.Invoke(this, EventArgs.Empty);
+                break;
+
+            case GameState.Paused:
+                Time.timeScale = 0f;
+                OnGamePaused?.Invoke(this, EventArgs.Empty);
                 break;
 
             case GameState.GameOver:
                 Time.timeScale = 0f;
+
+                int finalScore = CurrentScore;
+                int best = BestScore;
+
+                if (finalScore > best)
+                {
+                    PlayerPrefs.SetInt("BestScore", finalScore);
+                    PlayerPrefs.Save();
+                }
+
                 OnGameOver?.Invoke(this, EventArgs.Empty);
                 break;
         }
     }
 
-    public void EndGame() {
+    public void TogglePause()
+    {
+        if (currentGameState == GameState.Gameplaying)
+            SetGameState(GameState.Paused);
+        else if (currentGameState == GameState.Paused)
+            SetGameState(GameState.Gameplaying);
+    }
+
+    public void EndGame()
+    {
         SetGameState(GameState.GameOver);
     }
 }

@@ -1935,7 +1935,7 @@ MonoBehaviour:
   quitButton: {fileID: 494191369}
   scoreText: {fileID: 2069394182}
   bestScoreText: {fileID: 133161206}
-  menuSceneName: MainMenu
+  menuSceneName: MenuScene
 --- !u!1 &954059146
 GameObject:
   m_ObjectHideFlags: 0
